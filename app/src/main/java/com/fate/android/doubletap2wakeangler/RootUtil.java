@@ -21,47 +21,48 @@ public class RootUtil {
      * @return is device rooted
      */
     static public boolean isDeviceRooted() {
-        boolean isRooted = false;
+
+        boolean isRooted;
+        boolean exitSU;
+
         try {
-            java.lang.Process p = Runtime.getRuntime().exec("su");
-            DataOutputStream os = new DataOutputStream(p.getOutputStream());
-            DataInputStream is = new DataInputStream(p.getInputStream());
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            if (os != null && is != null) {
-                // Getting the id of the current user to check if this is root
-                os.writeBytes("id\n");
-                os.flush();
+            Process process = Runtime.getRuntime().exec("su");
+            DataOutputStream dataOutputStream = new DataOutputStream(process.getOutputStream());
+            DataInputStream dataInputStream = new DataInputStream(process.getInputStream());
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(dataInputStream));
 
-                // Get BufferedReader tor read a line of text
-                String uid = br.readLine();
-                boolean exitSu = false;
-                if (uid == null) {
-                    isRooted = false;
-                    exitSu = false;
-                    Log.d("ROOT", "Can't get root access or denied by user");
-                } else if (uid.contains("uid=0") == true) {
-                    isRooted = true;
-                    exitSu = true;
-                    Log.d("ROOT", "Root access granted");
-                } else {
-                    isRooted = false;
-                    exitSu = true;
-                    Log.d("ROOT", "Root access rejected: " + uid);
-                }
+            // Getting the id of the current user to check if root was granted
+            dataOutputStream.writeBytes("id\n");
+            dataOutputStream.flush();
 
-                if (exitSu) {
-                    os.writeBytes("exit\n");
-                    os.flush();
-                    os.close();
-                    Log.d("SHELL", "EXIT SUCCESS");
-                }
+            // Get BufferedReader to read DataInputStream for id
+            String uid = bufferedReader.readLine();
+            if (uid == null) {
+                isRooted = false;
+                exitSU = false;
+                Log.d("ROOT", "Can't get root access or denied by user");
+            } else if (uid.contains("uid=0")) {
+                isRooted = true;
+                exitSU = true;
+                Log.d("ROOT", "Root access granted");
+            } else {
+                isRooted = false;
+                exitSU = true;
+                Log.d("ROOT", "Root access rejected: " + uid);
+            }
+
+            if (exitSU) {
+                dataOutputStream.writeBytes("exit\n");
+                dataOutputStream.flush();
+                dataOutputStream.close();
+                Log.d("SHELL", "EXIT SUCCESS");
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // Can't get root!
-            // Probably broken pipe exception on trying to write to output stream (os) after su
-            // failed, meaning that the device is not rooted
 
+            // Can't get root!
+            // Probably broken pipe exception on trying to write to dataOutputStream after su
+            // failed, meaning that the device is not rooted
             isRooted = false;
             Log.d("ROOT", "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
