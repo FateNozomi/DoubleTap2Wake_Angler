@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import static android.R.id.edit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREFERENCES_KEY = "com.fate.android.doubletap2wakeangler";
 
     private TextView deviceAngler;
+    private TextView DT2W_STATE;
     private Button enableDT2W;
     private Button disableDT2W;
 
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         deviceAngler = (TextView) findViewById(R.id.device_angler);
+        DT2W_STATE = (TextView) findViewById(R.id.dt2w_state);
         enableDT2W = (Button) findViewById(R.id.enable_DT2W);
         disableDT2W = (Button) findViewById(R.id.disable_DT2W);
 
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     DT2W(true);
                     DT2WState(true);
+                    DT2W_STATE.setText(R.string.dt2w_state_enabled);
                 }
             });
             disableDT2W.setOnClickListener(new View.OnClickListener() {
@@ -47,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     DT2W(false);
                     DT2WState(false);
+                    DT2W_STATE.setText(R.string.dt2w_state_disabled);
                 }
             });
         } else {
@@ -76,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         RootUtil.runAsRoot(command);
     }
 
-    private boolean DT2WState(boolean isEnabled){
+    private boolean DT2WState(boolean isEnabled) {
         /**
          * Access the shared preferences file that's identified by the resource
          * string R.string.PREFERENCES_KEY and open it using the private mode so
@@ -84,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
          */
         SharedPreferences prefs =
                 getApplicationContext()
-                .getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
+                        .getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
 
         /**
          * Assign a boolean value into SAVED_STATE

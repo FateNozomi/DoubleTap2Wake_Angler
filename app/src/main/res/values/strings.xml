@@ -3,4 +3,6 @@
     <string name="enable">Enable</string>
     <string name="disable">disable</string>
     <string name="device_not_angler">¯\\_(ツ)_/¯</string>
+    <string name="dt2w_state_enabled">DT2W: ENABLED [PERSISTS ON BOOT]</string>
+    <string name="dt2w_state_disabled">DT2W: DISABLED</string>
 </resources>
