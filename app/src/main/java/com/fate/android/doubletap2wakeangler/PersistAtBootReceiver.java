@@ -16,14 +16,12 @@ public class PersistAtBootReceiver extends BroadcastReceiver {
 
     // Initialize constants for isDT2WEnabled() SharedPreferences
     private static final String SAVED_STATE = "DT2W_STATE";
-    private static final String PREFERENCES_KEY = "com.fate.android.doubletap2wakeangler";
 
     public void onReceive(Context context, Intent intent) {
 
-        final SharedPreferences prefs = context
-                .getSharedPreferences(PREFERENCES_KEY, Context.MODE_PRIVATE);
-
         Log.d("PersistAtBoot", "PersistAtBootReceiver: " + intent.getAction());
+
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             Log.d("PersistAtBoot", "BOOT_COMPLETED received!");
@@ -32,14 +30,9 @@ public class PersistAtBootReceiver extends BroadcastReceiver {
                 protected Void doInBackground(Void... params) {
                     if (prefs.getBoolean(SAVED_STATE, false)) {
                         DT2W(true);
+                        Log.d("PersistAtBoot", "DT2W doInBackground enabled");
                     }
                     return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void aVoid) {
-                    super.onPostExecute(aVoid);
-                    Log.d("PersistAtBoot", "DT2W enabled through PersistAtBootReceiver");
                 }
             }).execute();
         }

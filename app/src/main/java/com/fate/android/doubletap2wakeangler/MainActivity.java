@@ -2,6 +2,7 @@ package com.fate.android.doubletap2wakeangler;
 
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     // Initialize constants for isDT2WEnabled() SharedPreferences
     private static final String SAVED_STATE = "DT2W_STATE";
-    private static final String PREFERENCES_KEY = "com.fate.android.doubletap2wakeangler";
 
     private TextView deviceAngler;
     private TextView DT2W_STATE;
@@ -85,10 +85,7 @@ public class MainActivity extends AppCompatActivity {
          * string R.string.PREFERENCES_KEY and open it using the private mode so
          * the file is accessible by only this app.
          */
-        SharedPreferences prefs =
-                getApplicationContext()
-                        .getSharedPreferences(PREFERENCES_KEY, MODE_PRIVATE);
-
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         /**
          * Assign a boolean value into SAVED_STATE
          */
@@ -99,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
          * If SERVICE_STATUS_FLAG does not exist, set to false.
          */
         boolean savedState = prefs.getBoolean(SAVED_STATE, false);
-        Log.d("MainActivity", "prefs: " + savedState);
+        Log.d("MainActivity", "SAVED_STATE prefs: " + savedState);
         return savedState;
     }
 }
