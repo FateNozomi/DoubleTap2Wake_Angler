@@ -32,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         disableDT2W = (Button) findViewById(R.id.disable_DT2W);
 
         /**
+         * Check DT2WState and setText DT2W_STATE
+         */
+        DT2WState(null);
+
+        /**
          * Show buttons only on Angler devices.
          * /shruggie if device is not an Angler.
          */
@@ -79,24 +84,28 @@ public class MainActivity extends AppCompatActivity {
         RootUtil.runAsRoot(command);
     }
 
-    private boolean DT2WState(boolean isEnabled) {
+    private void DT2WState(Boolean isEnabled) {
         /**
-         * Access the shared preferences file that's identified by the resource
-         * string R.string.PREFERENCES_KEY and open it using the private mode so
-         * the file is accessible by only this app.
+         * Access the shared preferences that belongs to the activity
          */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        /**
-         * Assign a boolean value into SAVED_STATE
-         */
-        prefs.edit().putBoolean(SAVED_STATE, isEnabled).apply();
 
-        /**
-         * Retrieve a boolean value from the SAVED_STATE
-         * If SERVICE_STATUS_FLAG does not exist, set to false.
-         */
-        boolean savedState = prefs.getBoolean(SAVED_STATE, false);
-        Log.d("MainActivity", "SAVED_STATE prefs: " + savedState);
-        return savedState;
+        if (isEnabled != null) {
+            /**
+             * Assign a boolean value into SAVED_STATE
+             */
+            prefs.edit().putBoolean(SAVED_STATE, isEnabled).apply();
+        } else {
+            /**
+             * SetText for DT2W_STATE if isEnabled == null
+             */
+            boolean savedState = prefs.getBoolean(SAVED_STATE, false);
+            Log.d("MainActivity", "SAVED_STATE prefs: " + savedState);
+            if (savedState) {
+                DT2W_STATE.setText(R.string.dt2w_state_enabled);
+            } else {
+                DT2W_STATE.setText(R.string.dt2w_state_disabled);
+            }
+        }
     }
 }
