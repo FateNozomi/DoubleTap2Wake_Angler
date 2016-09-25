@@ -24,8 +24,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/DT2W_buttons"
         android:layout_centerInParent="true"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/dt2w_state_enabled" />
+        android:text="@string/dt2w_state_disabled"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         android:id="@+id/DT2W_buttons"
